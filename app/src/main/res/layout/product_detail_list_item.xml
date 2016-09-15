@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            style="@style/ProductListItem.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:gravity="center"
+            tools:text="GENERIC EDIT TEXT" />
+
+        <Button
+            style="@style/ProductListItem.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            tools:text="GENERIC BUTTON" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            style="@style/ProductListItem.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            tools:text="GENERIC BUTTON" />
+
+        <Button
+            style="@style/ProductListItem.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            tools:text="GENERIC BUTTON" />
+
+        <Button
+            style="@style/ProductListItem.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            tools:text="GENERIC BUTTON" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="92dp"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/detail_product_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:textColor="@color/textColorMainText"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="Product: Buttah" />
+
+            <TextView
+                android:id="@+id/detail_product_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:scrollHorizontally="false"
+                android:textColor="@color/textColorSecondaryText"
+                android:textSize="12sp"
+                tools:text="Cost: $1.00" />
+
+            <TextView
+                android:id="@+id/detail_product_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:scrollHorizontally="false"
+                android:textColor="@color/textColorSecondaryText"
+                android:textSize="12sp"
+                tools:text="Quantity: 25" />
+
+            <TextView
+                android:id="@+id/detail_quantity_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:scrollHorizontally="false"
+                android:textColor="@color/textColorSecondaryText"
+                android:textSize="12sp"
+                tools:text="ID: 1" />
+
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/detail_product_picture"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            tools:src="@android:drawable/ic_media_next" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

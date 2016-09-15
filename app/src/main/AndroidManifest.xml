@@ -15,6 +15,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".EditorActivity">
+        </activity>
+        <activity android:name=".InventoryDetailActivity">
+        </activity>
+        <provider
+            android:name="com.omegaspocktari.inventoryapp.InventoryProvider"
+            android:authorities="com.omegaspocktari.inventoryapp.InventoryProvider.products" />
     </application>
 
 </manifest>

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Inventory App</string>
+    <string name="hint_product_name">Product Name</string>
+    <string name="hint_product_price">Product Price</string>
+    <string name="hint_product_quantity">Product Quantity</string>
+    <string name="product_picture_button">Product Picture</string>
+    <string name="editor_menu_save">Save</string>
 </resources>

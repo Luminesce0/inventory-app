@@ -29,14 +29,20 @@ public class InventoryContract {
          * null otherwise??? So confusing...
          *          +This means a possible additional order time column?
          *
-         *
-         *
          */
-        public final static String TABLE_NAME = "product";
+        public final static String TABLE_NAME = "products";
         public final static String _ID = BaseColumns._ID;
         public final static String COLUMN_PRODUCT_NAME = "name";
         public final static String COLUMN_PRODUCT_CURRENT_QUANTITY = "current_quantity";
         public final static String COLUMN_PRODUCT_PRICE = "price";
+        public final static String COLUMN_PRODUCT_PICTURE = "picture";
+
+        /**
+         * Gallery Image Search or Take a Picture from Camera. Store the path to the image (Like a movie).
+         * Acquire that path and store that value as a string. Absolute path of uri. setBackground uri.
+         * Tryout.
+         */
+
     }
 
 }
