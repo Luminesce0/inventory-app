@@ -30,6 +30,10 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
      */
     public static final String DATABASE_NAME = "inventory.db";
 
+    public InventoryDbHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
     /**
      * SQL Code to start up a table.
      *
@@ -46,14 +50,10 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
     final String SQL_DROP_PRODUCT_TABLE = "DROP TABLE IF EXISTS " + ProductEntry.TABLE_NAME;
 
-    public InventoryDbHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
+    final public String SQL_FULL_QUERY = "SELECT * FROM " + ProductEntry.TABLE_NAME;
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-
         db.execSQL(SQL_CREATE_PRODUCT_TABLE);
     }
 
@@ -116,7 +116,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     public long createInventoryInfo(ContentValues values) throws SQLException {
         long id = getWritableDatabase().insert(ProductEntry.TABLE_NAME, null, values);
         if(id <= 0) {
-            throw new SQLException("failed to add an image");
+            throw new SQLException(LOG_TAG + "Failed to add an image");
         }
 
         return id;

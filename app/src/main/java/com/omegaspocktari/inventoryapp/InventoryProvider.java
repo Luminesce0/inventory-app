@@ -1,7 +1,6 @@
 package com.omegaspocktari.inventoryapp;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -10,55 +9,61 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
+import com.omegaspocktari.inventoryapp.data.InventoryContract;
+import com.omegaspocktari.inventoryapp.data.InventoryContract.ProductEntry;
 import com.omegaspocktari.inventoryapp.data.InventoryDbHelper;
 
 /**
  * Created by ${Michael} on 9/11/2016.
  */
-public class InventoryProvider extends ContentProvider{
+public class InventoryProvider extends ContentProvider {
+    private static final String LOG_TAG = InventoryProvider.class.getSimpleName();
 
-    static final String PROVIDER_NAME = "com.omegaspocktari.inventoryapp.provider.products";
-    static final String URL = "content://" + PROVIDER_NAME + "/products";
-    static final Uri CONTENT_URI = Uri.parse(URL);
+    private InventoryDbHelper inventoryDbHelper = null;
+    private SQLiteDatabase db;
 
+    /* This creates a relevant URI where it is getting all or a specific product? */
     private static final int PRODUCTS = 1;
     private static final int PRODUCTS_ID = 2;
     private static final UriMatcher uriMatcher = getUriMatcher();
-
     private static UriMatcher getUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(PROVIDER_NAME, "products", PRODUCTS);
-        uriMatcher.addURI(PROVIDER_NAME, "products/#", PRODUCTS_ID);
+        uriMatcher.addURI(ProductEntry.CONTENT_AUTHORITY, ProductEntry.PATH, PRODUCTS);
+        uriMatcher.addURI(ProductEntry.CONTENT_AUTHORITY, ProductEntry.PATH + "/#", PRODUCTS_ID);
         return uriMatcher;
     }
-
-    private SQLiteDatabase db;
-
-    /* This stuff is starting to get super confusing... */
-    private InventoryDbHelper inventoryDbHelper = null;
 
     @Override
     public boolean onCreate() {
         Context context = getContext();
-        InventoryDbHelper dbHelper = new InventoryDbHelper(context);
-
-        db = dbHelper.getWritableDatabase();
-        return (db == null)? false:true;
+        inventoryDbHelper = new InventoryDbHelper(context);
+        return true;
     }
 
-    @Nullable
+
+    /**
+     * When this is called it is passed all the relevant information of a query. it then uses a uriMatcher
+     * to see which specific uri we will be getting.
+     * @param uri
+     * @param projection
+     * @param selection
+     * @param selectionArgs
+     * @param sortOrder
+     * @return
+     */
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         String id = null;
-        if(uriMatcher.match(uri) == PRODUCTS_ID) {
+        if (uriMatcher.match(uri) == PRODUCTS_ID) {
             /* Query is for one single product. Get the ID from the URI */
             //TODO: Understand any of this...
             id = uri.getPathSegments().get(1);
         }
 
         //TODO: Review this...
-        // What's going on here is that the inventoryDbHElper would have a cursor of its own already
-        // created and then it would be acquired with the method.
+        // What's going on here is that the inventoryDbHelper would have a cursor of its own already
+        // created and then it would be acquired with the method. It has if statements that check for
+        // the given id and other arguments.
         return inventoryDbHelper.readInventoryInfo(id, projection, selection, selectionArgs, sortOrder);
     }
 
@@ -66,10 +71,16 @@ public class InventoryProvider extends ContentProvider{
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         try {
+            /* Call method to create inventory info */
             long id = inventoryDbHelper.createInventoryInfo(values);
-            //TODO: Definitely look this up....
-            Uri returnUri = ContentUris.withAppendedId(CONTENT_URI, id);
+
+            /* build the items URI with this method */
+            Uri returnUri = ProductEntry.buildItemsUri(id);
+
+            /* Notify the adapter of changes */
+            getContext().getContentResolver().notifyChange(uri, null);
             return returnUri;
+
         } catch (Exception e) {
             return null;
         }
@@ -78,7 +89,7 @@ public class InventoryProvider extends ContentProvider{
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         String id = null;
-        if(uriMatcher.match(uri) == PRODUCTS_ID) {
+        if (uriMatcher.match(uri) == PRODUCTS_ID) {
             id = uri.getPathSegments().get(1);
         }
         return inventoryDbHelper.deleteInventoryInfo(id);
@@ -94,14 +105,19 @@ public class InventoryProvider extends ContentProvider{
     }
 
 
-    @Nullable
+    /**
+     * Handles requests for the MIME type of the data at the given URI.
+     * TODO: Study MIME types.
+     * @param uri
+     * @return
+     */
     @Override
     public String getType(Uri uri) {
         switch (uriMatcher.match(uri)) {
             case PRODUCTS:
-                return "";
+                return InventoryContract.ProductEntry.CONTENT_TYPE;
             case PRODUCTS_ID:
-                return "";
+                return InventoryContract.ProductEntry.CONTENT_ITEM_TYPE;
         }
         return "";
     }

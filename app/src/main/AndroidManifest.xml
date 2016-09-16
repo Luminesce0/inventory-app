@@ -24,8 +24,9 @@
         <activity android:name=".InventoryDetailActivity">
         </activity>
         <provider
-            android:name="com.omegaspocktari.inventoryapp.InventoryProvider"
-            android:authorities="com.omegaspocktari.inventoryapp.inventoryprovider" />
+            android:name=".InventoryProvider"
+            android:authorities="com.omegaspocktari.inventoryapp.InventoryProvider"
+            android:grantUriPermissions="true"/>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.omegaspocktari.inventoryapp.fileprovider"

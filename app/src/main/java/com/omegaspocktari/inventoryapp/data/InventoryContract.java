@@ -1,5 +1,8 @@
 package com.omegaspocktari.inventoryapp.data;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -13,6 +16,30 @@ public class InventoryContract {
      * products of the store.
      */
     public static final class ProductEntry implements BaseColumns {
+
+        /* CONTENT_URI building blocks */
+        public static final String CONTENT_AUTHORITY = "com.omegaspocktari.inventoryapp";
+        public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+        public static final String PATH = "products";
+        public static final String PROVIDER_PATH = ".InventoryProvider";
+
+        /* CONTENT_URI */
+        public static final Uri CONTENT_URI_PROVIDER = Uri.parse(BASE_CONTENT_URI + PROVIDER_PATH);
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().
+                appendPath(PATH).build();
+        public static final String stringUri = CONTENT_URI.toString();
+
+        /* CONTENT relevant strings for getType */
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/"
+                + CONTENT_AUTHORITY + "/" + PATH;
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/"
+                + CONTENT_AUTHORITY + "/" + PATH;
+
+        /* URI to build items */
+        public static Uri buildItemsUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
 
         /**
          * All keys for the columns of the inventory database product table.
@@ -36,6 +63,10 @@ public class InventoryContract {
         public final static String COLUMN_PRODUCT_CURRENT_QUANTITY = "current_quantity";
         public final static String COLUMN_PRODUCT_PRICE = "price";
         public final static String COLUMN_PRODUCT_PICTURE = "picture";
+
+
+
+
 
         /**
          * Gallery Image Search or Take a Picture from Camera. Store the path to the image (Like a movie).

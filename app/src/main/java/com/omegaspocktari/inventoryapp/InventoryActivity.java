@@ -2,33 +2,34 @@ package com.omegaspocktari.inventoryapp;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.omegaspocktari.inventoryapp.data.InventoryContract.ProductEntry;
+import com.omegaspocktari.inventoryapp.data.InventoryDbHelper;
 
 public class InventoryActivity extends AppCompatActivity {
 
-    private static final String PROVIDER_NAME = "com.omegaspocktari.inventoryapp.InventoryProvider.products";
-    private static final Uri CONTENT_URI = Uri.parse("content://" + PROVIDER_NAME + "/products");
+    private static final String LOG_TAG = InventoryActivity.class.getSimpleName();
 
     /**
      * Below are the relevant arrays for the mCursor adapter for the list view
      */
-    private static final String [] COLUMNS_TO_BE_BOUND =  new String[] {
+    private static final String[] COLUMNS_TO_BE_BOUND = new String[]{
             ProductEntry._ID,
             ProductEntry.COLUMN_PRODUCT_NAME,
             ProductEntry.COLUMN_PRODUCT_PRICE,
             ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY
     };
 
-    private static final int[] LAYOUT_ITEMS_TO_FILL = new int[] {
+    private static final int[] LAYOUT_ITEMS_TO_FILL = new int[]{
             R.id.product_name,
             R.id.product_price,
             R.id.product_quantity,
@@ -37,7 +38,7 @@ public class InventoryActivity extends AppCompatActivity {
     /**
      * Below are the relevant arrays for the mCursor adapter for the detail view
      */
-    private static final String [] COLUMNS_TO_BE_BOUND_DETAIL =  new String[] {
+    private static final String[] COLUMNS_TO_BE_BOUND_DETAIL = new String[]{
             ProductEntry._ID,
             ProductEntry.COLUMN_PRODUCT_NAME,
             ProductEntry.COLUMN_PRODUCT_PRICE,
@@ -45,7 +46,7 @@ public class InventoryActivity extends AppCompatActivity {
             ProductEntry.COLUMN_PRODUCT_PICTURE
     };
 
-    private static final int[] LAYOUT_ITEMS_TO_FILL_DETAIL = new int[] {
+    private static final int[] LAYOUT_ITEMS_TO_FILL_DETAIL = new int[]{
             R.id.detail_quantity_id,
             R.id.detail_product_name,
             R.id.detail_product_price,
@@ -53,8 +54,12 @@ public class InventoryActivity extends AppCompatActivity {
             R.id.detail_product_picture
     };
 
-    private ListView productListView;
+    private ListView mProductListView;
     private SimpleCursorAdapter adapter;
+    private TextView mEmptyStateView;
+    private InventoryDbHelper inventoryDbHelper;
+    private SQLiteDatabase sqLiteDatabase;
+    private Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,27 +76,43 @@ public class InventoryActivity extends AppCompatActivity {
             }
         });
 
-        productListView = (ListView) findViewById(R.id.list);
+        /**
+         * Use the InventoryDbHelper object to get a writable database and put that into an
+         * SQLiteDatabase object to obtain database options to generate content for the cursor
+         * to populate the listview/adapter
+         */
+        inventoryDbHelper = new InventoryDbHelper(this);
+        sqLiteDatabase = inventoryDbHelper.getWritableDatabase();
+        cursor = sqLiteDatabase.rawQuery(inventoryDbHelper.SQL_FULL_QUERY, null);
+        InventoryAdapter adapter = new InventoryAdapter(this, cursor);
 
-        adapter = new SimpleCursorAdapter(
-                getBaseContext(),
-                R.layout.product_list_item,
-                null,
-                COLUMNS_TO_BE_BOUND,
-                LAYOUT_ITEMS_TO_FILL,
-                0 /* Flags? TODO: Look this up */);
 
-        productListView.setAdapter(adapter);
-//        refreshValuesFromContentProvider();
+        mProductListView = (ListView) findViewById(R.id.list);
+        mProductListView.setAdapter(adapter);
+
+        if (adapter.isEmpty()) {
+            mEmptyStateView = (TextView) findViewById(R.id.empty_state_text_view);
+            mProductListView.setEmptyView(mEmptyStateView);
+            mEmptyStateView.setText(R.string.empty_state_view);
+        } else {
+            mProductListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                    /* onItemclick will allow us to get the specific item clicked's information */
+                    Cursor c = (Cursor) adapterView.getItemAtPosition(position);
+                    //TODO: is this necessary if we've already got the item at that position?
+                    c.moveToPosition(position);
+                    long _id = c.getLong(c.getColumnIndexOrThrow(ProductEntry._ID));
+
+                    Intent intent = new Intent(InventoryActivity.this, InventoryDetailActivity.class);
+                    intent.putExtra("KEY", _id);
+                    startActivity(intent);
+                }
+            });
+        }
 
     }
-
-    private void refreshValuesFromContentProvider() {
-        CursorLoader cursorLoader = new CursorLoader(getBaseContext(), CONTENT_URI, null, null, null, null);
-        Cursor c = cursorLoader.loadInBackground();
-        adapter.swapCursor(c);
-    }
-
 
 
 }

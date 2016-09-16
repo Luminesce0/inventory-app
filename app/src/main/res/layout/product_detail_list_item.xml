@@ -12,13 +12,13 @@
         android:orientation="horizontal">
 
         <EditText
-            style="@style/ProductListItem.Button"
+            style="@style/EditorFieldStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="2"
             android:gravity="center"
-            tools:text="GENERIC EDIT TEXT" />
+            tools:text="@string/hint_detail_view_modify_quantity" />
 
         <Button
             style="@style/ProductListItem.Button"
@@ -27,7 +27,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            tools:text="GENERIC BUTTON" />
+            tools:text="Modify Quantity" />
 
 
     </LinearLayout>
@@ -44,7 +44,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            tools:text="GENERIC BUTTON" />
+            tools:text="Order Product" />
 
         <Button
             style="@style/ProductListItem.Button"
@@ -53,16 +53,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            tools:text="GENERIC BUTTON" />
-
-        <Button
-            style="@style/ProductListItem.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            tools:text="GENERIC BUTTON" />
+            tools:text="Delete Product" />
 
     </LinearLayout>
 
@@ -137,8 +128,5 @@
             android:layout_weight="1"
             android:gravity="center"
             tools:src="@android:drawable/ic_media_next" />
-
     </LinearLayout>
-
-
 </LinearLayout>

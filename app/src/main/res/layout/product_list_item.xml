@@ -50,6 +50,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/product_sell"
         style="@style/ProductListItem.Button"
         android:layout_width="0dp"
         android:layout_weight="2"

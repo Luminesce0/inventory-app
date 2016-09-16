@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,8 @@ import java.util.Date;
  * Created by ${Michael} on 9/13/2016.
  */
 public class EditorActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = EditorActivity.class.getSimpleName();
 
     String mCurrentPhotoPath;
 
@@ -92,6 +95,7 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     public void addProduct() {
+        Log.e(LOG_TAG, "What is going on? Add product called..." );
         Uri fileUri = Uri.parse("android.resource://com.omegaspocktari.inventoryapp/" + mPictureImageView.getResources());
         /* Add a new student record */
         ContentValues values = new ContentValues();
@@ -105,9 +109,11 @@ public class EditorActivity extends AppCompatActivity {
         values.put(InventoryContract.ProductEntry.COLUMN_PRODUCT_PICTURE,
                 fileUri.toString());
 
-        Uri uri = getContentResolver().insert(InventoryProvider.CONTENT_URI, values);
+        Log.e(LOG_TAG, "What is going on? uri = getContentresolver" );
+        Uri uri = getContentResolver().insert(InventoryContract.ProductEntry.CONTENT_URI_PROVIDER, values);
 
-        Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+        Log.e(LOG_TAG, "What is going on? Toast (before)" );
+        Toast.makeText(getBaseContext(), "Uri.toString() doesn't work for some reason...", Toast.LENGTH_LONG).show();
     }
 
     private void takePicture() {

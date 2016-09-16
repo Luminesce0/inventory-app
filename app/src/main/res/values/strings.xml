@@ -5,4 +5,6 @@
     <string name="hint_product_quantity">Product Quantity</string>
     <string name="product_picture_button">Product Picture</string>
     <string name="editor_menu_save">Save</string>
+    <string name="hint_detail_view_modify_quantity">Quantity Modification</string>
+    <string name="empty_state_view">Click on the + below to add an item...</string>
 </resources>
