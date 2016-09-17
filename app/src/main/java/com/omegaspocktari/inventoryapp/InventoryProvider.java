@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 
 import com.omegaspocktari.inventoryapp.data.InventoryContract;
-import com.omegaspocktari.inventoryapp.data.InventoryContract.ProductEntry;
 import com.omegaspocktari.inventoryapp.data.InventoryDbHelper;
 
 /**
@@ -28,8 +27,8 @@ public class InventoryProvider extends ContentProvider {
     private static final UriMatcher uriMatcher = getUriMatcher();
     private static UriMatcher getUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(ProductEntry.CONTENT_AUTHORITY, ProductEntry.PATH, PRODUCTS);
-        uriMatcher.addURI(ProductEntry.CONTENT_AUTHORITY, ProductEntry.PATH + "/#", PRODUCTS_ID);
+        uriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH, PRODUCTS);
+        uriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH + "/#", PRODUCTS_ID);
         return uriMatcher;
     }
 
@@ -67,6 +66,7 @@ public class InventoryProvider extends ContentProvider {
         return inventoryDbHelper.readInventoryInfo(id, projection, selection, selectionArgs, sortOrder);
     }
 
+
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
@@ -75,7 +75,7 @@ public class InventoryProvider extends ContentProvider {
             long id = inventoryDbHelper.createInventoryInfo(values);
 
             /* build the items URI with this method */
-            Uri returnUri = ProductEntry.buildItemsUri(id);
+            Uri returnUri = InventoryContract.buildItemsUri(id);
 
             /* Notify the adapter of changes */
             getContext().getContentResolver().notifyChange(uri, null);
@@ -115,9 +115,9 @@ public class InventoryProvider extends ContentProvider {
     public String getType(Uri uri) {
         switch (uriMatcher.match(uri)) {
             case PRODUCTS:
-                return InventoryContract.ProductEntry.CONTENT_TYPE;
+                return InventoryContract.CONTENT_TYPE;
             case PRODUCTS_ID:
-                return InventoryContract.ProductEntry.CONTENT_ITEM_TYPE;
+                return InventoryContract.CONTENT_ITEM_TYPE;
         }
         return "";
     }

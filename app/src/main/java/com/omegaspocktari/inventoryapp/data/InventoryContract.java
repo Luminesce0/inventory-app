@@ -10,35 +10,35 @@ import android.provider.BaseColumns;
  */
 public class InventoryContract {
 
+    /* CONTENT_URI building blocks */
+    //Package
+    public static final String CONTENT_AUTHORITY = "com.omegaspocktari.inventoryapp";
+    // Content + Package
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public static final String PATH = "products";
+    public static final String PROVIDER_PATH = ".InventoryProvider";
 
+    /* CONTENT_URI */
+    public static final Uri CONTENT_URI_PROVIDER = Uri.parse(BASE_CONTENT_URI + PROVIDER_PATH);
+    public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().
+            appendPath(PATH).build();
+    public static final String stringUri = CONTENT_URI.toString();
+
+    /* CONTENT relevant strings for getType */
+    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/"
+            + CONTENT_AUTHORITY + "/" + PATH;
+    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/"
+            + CONTENT_AUTHORITY + "/" + PATH;
+
+    /* URI to build items */
+    public static Uri buildItemsUri(long id) {
+        return ContentUris.withAppendedId(CONTENT_URI, id);
+    }
     /**
      * Inner class that defines constants for the inventory database table that contains individual
      * products of the store.
      */
     public static final class ProductEntry implements BaseColumns {
-
-        /* CONTENT_URI building blocks */
-        public static final String CONTENT_AUTHORITY = "com.omegaspocktari.inventoryapp";
-        public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-        public static final String PATH = "products";
-        public static final String PROVIDER_PATH = ".InventoryProvider";
-
-        /* CONTENT_URI */
-        public static final Uri CONTENT_URI_PROVIDER = Uri.parse(BASE_CONTENT_URI + PROVIDER_PATH);
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().
-                appendPath(PATH).build();
-        public static final String stringUri = CONTENT_URI.toString();
-
-        /* CONTENT relevant strings for getType */
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/"
-                + CONTENT_AUTHORITY + "/" + PATH;
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/"
-                + CONTENT_AUTHORITY + "/" + PATH;
-
-        /* URI to build items */
-        public static Uri buildItemsUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
-        }
 
 
         /**
