@@ -14,17 +14,18 @@ import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
+import com.omegaspocktari.inventoryapp.data.InventoryContract;
 import com.omegaspocktari.inventoryapp.data.InventoryContract.ProductEntry;
 
 /**
  * Created by ${Michael} on 9/16/2016.
  */
-public class InventoryAdapter extends CursorAdapter {
+public class InventoryCursorAdapter extends CursorAdapter {
 
     private Context mContext;
     private ContentValues values;
 
-    public InventoryAdapter(Activity context, Cursor cursor) {
+    public InventoryCursorAdapter(Activity context, Cursor cursor) {
         super(context, cursor, 0);
 
     }
@@ -55,7 +56,7 @@ public class InventoryAdapter extends CursorAdapter {
                 String[] selectionArgs = { Long.toString(id) };
                 Cursor query;
                 query = mContext.getContentResolver().query(
-                        ProductEntry.CONTENT_URI,
+                        InventoryContract.CONTENT_URI,
                         null,
                         selection, /* Looking for a certain item */
                         selectionArgs, /* The argument for the certain item is the id */
@@ -80,7 +81,7 @@ public class InventoryAdapter extends CursorAdapter {
                  */
                 values = new ContentValues();
                 values.put(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY, String.valueOf(quantity));
-                Uri uri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, id);
+                Uri uri = ContentUris.withAppendedId(InventoryContract.CONTENT_URI, id);
                 mContext.getContentResolver().update(uri, values, null, null);
             }
         });

@@ -81,14 +81,28 @@ public class InventoryActivity extends AppCompatActivity {
          * SQLiteDatabase object to obtain database options to generate content for the cursor
          * to populate the listview/adapter
          */
-        inventoryDbHelper = new InventoryDbHelper(this);
-        sqLiteDatabase = inventoryDbHelper.getWritableDatabase();
-        cursor = sqLiteDatabase.rawQuery(inventoryDbHelper.SQL_FULL_QUERY, null);
-        InventoryAdapter adapter = new InventoryAdapter(this, cursor);
+        displayDatabaseInfo();
 
 
-        mProductListView = (ListView) findViewById(R.id.list);
-        mProductListView.setAdapter(adapter);
+
+    }
+
+    private void displayDatabaseInfo() {
+
+        String[] projection = {
+                ProductEntry.COLUMN_PRODUCT_NAME,
+                ProductEntry.COLUMN_PRODUCT_PRICE,
+                ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY
+        };
+
+        Cursor cursor = getContentResolver().query(ProductEntry.CONTENT_URI,
+                projection, null, null, null);
+
+        ListView listView = (ListView) findViewById(R.id.list);
+
+        InventoryCursorAdapter adapter = new InventoryCursorAdapter(this, cursor);
+
+        listView.setAdapter(adapter);
 
         if (adapter.isEmpty()) {
             mEmptyStateView = (TextView) findViewById(R.id.empty_state_text_view);
@@ -111,8 +125,9 @@ public class InventoryActivity extends AppCompatActivity {
                 }
             });
         }
-
     }
+
+
 
 
 }
