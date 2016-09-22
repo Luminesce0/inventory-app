@@ -13,20 +13,20 @@
     <!--TODO: Must implement a default text view-->
 
     <!--TODO: Here will be the list item layout along with the given buttons.-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
 
         <TextView
             android:id="@+id/empty_state_text_view"
             style="@style/ProductListItem"
             tools:text="Here's Some Random Text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <!--TODO: List Items will depict product name, current quantity & price. Populates products stored in table-->
     <!--TODO: Each list item will allow the user to track a sale of the item. This would be the detail screen...? Cont.
@@ -39,6 +39,7 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:dividerHeight="2dp"
         android:orientation="vertical">
 
 

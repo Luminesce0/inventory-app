@@ -65,7 +65,26 @@ public class InventoryContract {
         public final static String COLUMN_PRODUCT_PRICE = "price";
         public final static String COLUMN_PRODUCT_PICTURE = "picture";
 
+        /**
+         * Below are the relevant arrays for the mCursor adapter for the list view
+         */
+        public static final String[] COLUMNS_TO_BE_BOUND = new String[]{
+                ProductEntry._ID,
+                ProductEntry.COLUMN_PRODUCT_NAME,
+                ProductEntry.COLUMN_PRODUCT_PRICE,
+                ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY
+        };
 
+        /**
+         * Below are the relevant arrays for the mCursor adapter for the detail view
+         */
+        public static final String[] COLUMNS_TO_BE_BOUND_DETAIL = new String[]{
+                ProductEntry._ID,
+                ProductEntry.COLUMN_PRODUCT_NAME,
+                ProductEntry.COLUMN_PRODUCT_PRICE,
+                ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY,
+                ProductEntry.COLUMN_PRODUCT_PICTURE
+        };
 
 
 

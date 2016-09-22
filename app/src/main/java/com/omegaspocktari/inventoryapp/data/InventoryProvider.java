@@ -74,6 +74,12 @@ public class InventoryProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI: " + uri);
         }
+        /**
+         * Sets notification URI on the cursor so we know what content URI the cursor was created for.
+         * If the data at this URI changes then we would know we need to update the cursor.
+         */
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
         return cursor;
 
     }
@@ -115,6 +121,9 @@ public class InventoryProvider extends ContentProvider {
             return null;
         }
 
+        /** Notify all listeners that the data has changed with the given product content URI */
+        getContext().getContentResolver().notifyChange(uri, null);
+
         return ContentUris.withAppendedId(uri, id);
     }
 
@@ -125,11 +134,19 @@ public class InventoryProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case PRODUCTS:
+                /** Notify all listeners that the data has changed with the given product content URI */
+                getContext().getContentResolver().notifyChange(uri, null);
                 return database.delete(ProductEntry.TABLE_NAME, selection, selectionArgs);
             case PRODUCT_ID:
                 selection = ProductEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return database.delete(ProductEntry.TABLE_NAME, selection, selectionArgs);
+                int rowsDeleted = database.delete(ProductEntry.TABLE_NAME, selection, selectionArgs);
+
+                if (rowsDeleted != 0) {
+                    /** Notify all listeners that the data has changed for the pet content URI */
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+                return rowsDeleted;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for: " + uri);
         }
@@ -158,12 +175,24 @@ public class InventoryProvider extends ContentProvider {
      * Return the number of rows that were successfully updated.
      */
     private int updateProduct(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
-        //TODO: Checkout the PetProvider Insert class for examples of content validation
+        //TODO: The class only wants us to be able to modify quantity properly.
+        if (contentValues.containsKey(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY)) {
+            String productQuantity = contentValues.getAsString(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY);
+
+        }
+
         if (contentValues.size() == 0) {
             return 0;
         }
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
-        return database.update(ProductEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+        int rowsUpdated = database.update(ProductEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+
+        if (rowsUpdated != 0 ) {
+            /** Notify all listeners that the data has changed with the given content URI */
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rowsUpdated;
     }
 }

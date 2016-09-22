@@ -11,7 +11,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_margin="8dp"
         android:layout_weight="3"
+        android:gravity="center"
         android:orientation="vertical">
 
         <TextView
@@ -21,8 +23,9 @@
             android:layout_marginBottom="2dp"
             android:ellipsize="end"
             android:maxLines="2"
+            android:textAppearance="?android:textAppearanceLarge"
             android:textColor="@color/textColorMainText"
-            android:textSize="16sp"
+            android:textStyle="bold"
             tools:text="Product: Buttah" />
 
         <TextView
@@ -53,8 +56,11 @@
         android:id="@+id/product_sell"
         style="@style/ProductListItem.Button"
         android:layout_width="0dp"
-        android:layout_weight="2"
-        android:gravity="center"
         android:layout_height="wrap_content"
-        tools:text="Purchase" />
+        android:layout_weight="2"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="@string/product_purchase" />
 </LinearLayout>

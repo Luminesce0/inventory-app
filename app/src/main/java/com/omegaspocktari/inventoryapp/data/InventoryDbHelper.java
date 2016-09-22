@@ -1,12 +1,8 @@
 package com.omegaspocktari.inventoryapp.data;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQueryBuilder;
 
 import com.omegaspocktari.inventoryapp.data.InventoryContract.ProductEntry;
 
@@ -63,79 +59,4 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
          * TODO: I wonder if I'll have to put anything here.
          */
     }
-
-    public void onDeleteTable(Context context, SQLiteDatabase db) {
-        db.execSQL(SQL_DROP_PRODUCT_TABLE);
-    }
-
-    /**
-     * Method to delete database
-     * @param context   Context from the location where the method is being called
-     * @param db        Database from the relevant context
-     */
-    public void onDeleteDatabase(Context context, InventoryDbHelper db) {
-
-        db.close();
-        context.deleteDatabase(db.getDatabaseName());
-    }
-
-    /**
-     * Checkit... SQLiteQueryBuilder built up this query.
-     * TODO: Look up setTables method.
-     * TODO: Look up SQLiteQueryBuilder.
-     * @param id
-     * @param projection
-     * @param selection
-     * @param selectionArgs
-     * @param sortOrder
-     * @return
-     */
-    public Cursor readInventoryInfo(String id, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        SQLiteQueryBuilder sqLiteQueryBuilder = new SQLiteQueryBuilder();
-        sqLiteQueryBuilder.setTables(ProductEntry.TABLE_NAME);
-
-        if(id != null) {
-            sqLiteQueryBuilder.appendWhere("_id" + " = " + id);
-        }
-
-        if(sortOrder == null || sortOrder == "") {
-            sortOrder = ProductEntry.COLUMN_PRODUCT_NAME;
-        }
-
-        Cursor cursor = sqLiteQueryBuilder.query(getReadableDatabase(),
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                sortOrder);
-
-        return cursor;
-    }
-
-    public long createInventoryInfo(ContentValues values) throws SQLException {
-        long id = getWritableDatabase().insert(ProductEntry.TABLE_NAME, null, values);
-        if(id <= 0) {
-            throw new SQLException(LOG_TAG + "Failed to add an image");
-        }
-
-        return id;
-    }
-
-    public int deleteInventoryInfo(String id) {
-        if(id == null) {
-            return getWritableDatabase().delete(ProductEntry.TABLE_NAME, null, null);
-        } else {
-            return getWritableDatabase().delete(ProductEntry.TABLE_NAME, "_id=?", new String[]{id});
-        }
-    }
-
-    public int updateInventoryInfo(String id, ContentValues values) {
-        if(id == null) {
-            return getWritableDatabase().update(ProductEntry.TABLE_NAME, values, null, null);
-        } else {
-            return getWritableDatabase().update(ProductEntry.TABLE_NAME, values, "_id=?", new String[]{id});
-        }
-    }
-
 }

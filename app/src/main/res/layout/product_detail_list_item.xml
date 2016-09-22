@@ -2,65 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="16dp"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/detail_product_picture"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            style="@style/EditorFieldStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="2"
-            android:gravity="center"
-            tools:text="@string/hint_detail_view_modify_quantity" />
-
-        <Button
-            style="@style/ProductListItem.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            tools:text="Modify Quantity" />
-
-
-    </LinearLayout>
+        android:layout_height="184dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        tools:src="@android:drawable/ic_media_next" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            style="@style/ProductListItem.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            tools:text="Order Product" />
-
-        <Button
-            style="@style/ProductListItem.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            tools:text="Delete Product" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -78,8 +34,8 @@
                 android:layout_marginBottom="2dp"
                 android:ellipsize="end"
                 android:gravity="center_horizontal"
+                android:textAppearance="?android:textAppearanceLarge"
                 android:textColor="@color/textColorMainText"
-                android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="Product: Buttah" />
 
@@ -106,7 +62,7 @@
                 tools:text="Quantity: 25" />
 
             <TextView
-                android:id="@+id/detail_quantity_id"
+                android:id="@+id/detail_product_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -118,15 +74,95 @@
 
 
         </LinearLayout>
+    </LinearLayout>
 
-        <ImageView
-            android:id="@+id/detail_product_picture"
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_margin="16dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/detail_button_order"
+            style="@style/ProductListItem.Button"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="4dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            tools:src="@android:drawable/ic_media_next" />
+            tools:text="Order Product" />
+
+        <Button
+            android:id="@+id/detail_button_delete"
+            style="@style/ProductListItem.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            tools:text="Delete Product" />
+
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="?android:textAppearanceLarge"
+                tools:text="Quantity:" />
+
+            <EditText
+                android:id="@+id/product_button_edit_text_field"
+                style="@style/EditorFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/hint_detail_view_modify_quantity" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/detail_button_increase"
+                style="@style/ProductListItem.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                tools:text="-" />
+
+            <Button
+                android:id="@+id/detail_button_decrease"
+                style="@style/ProductListItem.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                tools:text="+" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
 </LinearLayout>
