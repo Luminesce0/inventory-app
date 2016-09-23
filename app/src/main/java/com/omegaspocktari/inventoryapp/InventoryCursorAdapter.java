@@ -23,6 +23,7 @@ import com.omegaspocktari.inventoryapp.data.ProductValidation;
 public class InventoryCursorAdapter extends CursorAdapter {
 //
     //
+    //
     private Context mContext;
     private ContentValues values;
     private static final String LOG_TAG = InventoryCursorAdapter.class.getSimpleName();
