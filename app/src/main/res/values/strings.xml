@@ -14,4 +14,13 @@
     <string name="product_purchase">Purchase</string>
     <string name="app_product_editor_detail">Product Detail Editor</string>
     <string name="app_product_editor">Product Editor</string>
+    <string name="detail_activity_delete_product">Yes</string>
+    <string name="delete_product_detail_alert">DELETE PRODUCT</string>
+    <string name="return_product_detail">RETURN</string>
+    <string name="empty_text_view">Click the + below to add a product...</string>
+    <string name="detail_order_product">Order Product</string>
+    <string name="detail_delete_product">Delete Product</string>
+    <string name="decrease_quantity_button_text">-</string>
+    <string name="increase_quantity_button_text">+</string>
+    <string name="delete_table">Delete Table</string>
 </resources>

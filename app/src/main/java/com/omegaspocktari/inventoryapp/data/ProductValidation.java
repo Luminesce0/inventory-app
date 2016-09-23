@@ -17,8 +17,9 @@ public class ProductValidation {
     public static boolean checkIsFloat(EditText editTextField) {
         try {
             Float.parseFloat(editTextField.getText().toString());
+
             return true;
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             Log.e(LOG_TAG, "Error parsing float: " + editTextField.getText().toString(), e);
             return false;
         }
@@ -28,7 +29,7 @@ public class ProductValidation {
         try {
             Integer.parseInt(editTextField.getText().toString());
             return true;
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             Log.e(LOG_TAG, "Error parsing int: " + editTextField.getText().toString(), e);
             return false;
         }
@@ -49,4 +50,17 @@ public class ProductValidation {
         }
     }
 
+    public static String formatFloat(Float f) {
+        Log.e(LOG_TAG, "Here's the FLoat: " + f);
+        float epsilon = 0.004f;
+        float storage = f;
+        if (Math.abs(Math.round(f) - f) < epsilon) {
+            /** 10 characters in with with 0 places after decimal */
+            return String.format("$%-10.2f", storage);
+        } else {
+            return String.format("$%-10.2f", storage);
+        }
+
+
+    }
 }

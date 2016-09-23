@@ -260,18 +260,15 @@ public class EditorActivity extends AppCompatActivity {
                 && !ProductValidation.checkBlank(productPicture)) {
             Log.e(LOG_TAG, "All checkBlanks returned false/pr");
             //TODO: Add functionality to support floats and integers.
-            if (!ProductValidation.checkIsFloat(productPrice)) {
-                Toast.makeText(EditorActivity.this, "Price is incorrect format", Toast.LENGTH_SHORT).show();
-                Log.e(LOG_TAG, "Float");
-                return false;
-            } else {
-                if (!ProductValidation.checkIsInteger(productQuantity)) {
-                    Toast.makeText(EditorActivity.this, "Quantity is incorrect in format", Toast.LENGTH_SHORT).show();
-                    Log.e(LOG_TAG, "Integer");
-                    return false;
+            try {
+                if (!ProductValidation.checkIsFloat(productPrice) || !ProductValidation.checkIsInteger(productQuantity)) {
+                    throw new IllegalArgumentException("Incorrect Params");
                 } else {
                     return true;
                 }
+            } catch (Exception e) {
+                Toast.makeText(EditorActivity.this, "Price isn't Float or Quantity isn't integer...", Toast.LENGTH_SHORT).show();
+                return false;
             }
         } else {
             Toast.makeText(EditorActivity.this, "Empty Inputs Detected", Toast.LENGTH_SHORT).show();
@@ -288,10 +285,15 @@ public class EditorActivity extends AppCompatActivity {
         /* Add a new student record */
             ContentValues values = new ContentValues();
 
+            float floatPrice = Float.valueOf(mPriceEditText.getText().toString());
+            Log.e(LOG_TAG, "Float Price in ADDPRODUCT(): " + floatPrice);
+            String price = ProductValidation.formatFloat(floatPrice);
+            Log.e(LOG_TAG, "Returned vriable from Product Validation: " + price);
+
             values.put(InventoryContract.ProductEntry.COLUMN_PRODUCT_NAME,
                     mNameEditText.getText().toString());
             values.put(ProductEntry.COLUMN_PRODUCT_PRICE,
-                    mPriceEditText.getText().toString());
+                    price);
             values.put(InventoryContract.ProductEntry.COLUMN_PRODUCT_PICTURE,
                     mPictureUri.toString());
             values.put(InventoryContract.ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY,

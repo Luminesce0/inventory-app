@@ -7,6 +7,7 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,9 +17,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.omegaspocktari.inventoryapp.data.InventoryContract.ProductEntry;
+import com.omegaspocktari.inventoryapp.data.InventoryDbHelper;
 
 public class InventoryActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -34,12 +37,15 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
      */
     InventoryCursorAdapter mInventoryCursorAdapter;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory);
 
-        /* Setup FAB to open EditorActivity */
+        /** Setup FAB to open EditorActivity */
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +65,7 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         productListView.setEmptyView(emptyView);
 
         /** Adapter to create list items for each row of product data within the cursor */
-        mInventoryCursorAdapter = new InventoryCursorAdapter(this, null);
+        mInventoryCursorAdapter = new InventoryCursorAdapter(this, null, getContentResolver());
         productListView.setAdapter(mInventoryCursorAdapter);
 
         productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -94,20 +100,15 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_insert_dummy_data:
-                insertProduct();
+            case R.id.delete_table:
+                deleteTable();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void insertProduct() {
-        ContentValues values = new ContentValues();
-        values.put(ProductEntry.COLUMN_PRODUCT_NAME, "Schmeckle");
-        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, 10);
-        values.put(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY, 3);
-
-        Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+    private void deleteTable() {
+        getContentResolver().delete(ProductEntry.CONTENT_URI, null, null);
     }
 
     /**

@@ -1,17 +1,21 @@
 package com.omegaspocktari.inventoryapp;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.omegaspocktari.inventoryapp.data.InventoryContract.ProductEntry;
+import com.omegaspocktari.inventoryapp.data.ProductValidation;
 
 /**
  * Created by ${Michael} on 9/16/2016.
@@ -21,15 +25,17 @@ public class InventoryCursorAdapter extends CursorAdapter {
     private Context mContext;
     private ContentValues values;
     private static final String LOG_TAG = InventoryCursorAdapter.class.getSimpleName();
+    private ContentResolver contentResolver;
 
-    public InventoryCursorAdapter(Activity context, Cursor cursor) {
+    public InventoryCursorAdapter(Activity context, Cursor cursor, ContentResolver resolver) {
         super(context, cursor, 0);
-
+        contentResolver = resolver;
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
         return LayoutInflater.from(context).inflate(R.layout.product_list_item, viewGroup, false);
+
     }
 
     @Override
@@ -37,58 +43,48 @@ public class InventoryCursorAdapter extends CursorAdapter {
         TextView productName = (TextView) view.findViewById(R.id.product_name);
         TextView productPrice = (TextView) view.findViewById(R.id.product_price);
         TextView productQuantity = (TextView) view.findViewById(R.id.product_quantity);
+        Button productSell = (Button) view.findViewById(R.id.product_sell);
 
-        final long id = cursor.getLong(cursor.getColumnIndexOrThrow(ProductEntry._ID));
-        Log.e(LOG_TAG, "ID: " + id );
+
+
         String name = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_NAME));
-        Log.e(LOG_TAG, "Name: " + name );
 //TODO: Format this to an actual decimal price number
-        String price = "$" + cursor.getInt(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_PRICE));
-        Log.e(LOG_TAG, "Price: " + price );
-        String quantity = String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY)));
-        Log.e(LOG_TAG, "ID: " + quantity );
+        String price = "Price: " + ProductValidation.formatFloat(cursor.getFloat(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_PRICE)));
+        final String quantity = "Quantity: " + String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY)));
 
         productName.setText(name);
         productPrice.setText(price);
         productQuantity.setText(quantity);
+
+        final int currentQuantity = cursor.getInt(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY));
+        final int currentId = cursor.getInt(cursor.getColumnIndexOrThrow(ProductEntry._ID));
+
+        productSell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int quantity = currentQuantity;
+
+                if (quantity > 0) {
+
+                    Uri uri = Uri.parse(ProductEntry.CONTENT_URI + "/" + currentId);
+
+                    //TODO: What am I doing.
+                    int quantityChange = quantity--;
+                    String where = ProductEntry._ID + "=?";
+                    String[] whereArgs = {String.valueOf(currentId)};
+
+                    ContentValues values = new ContentValues();
+                    values.put(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY, quantityChange);
+
+                    contentResolver.update(uri, values, where, whereArgs);
+
+                } else {
+                    Toast.makeText(mContext, "Cannot Reduce Quantity Below 0...", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
             //TODO: Implement this method.
-//        Button productSell = (Button) view.findViewById(R.id.product_sell);
-//        productSell.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.e("Adapter", "here is the id value: " + id);
-//                String selection = "_ID=?";
-//                String[] selectionArgs = { Long.toString(id) };
-//                Cursor query;
-//                query = mContext.getContentResolver().query(
-//                        ProductEntry.CONTENT_URI,
-//                        null,
-//                        selection, /* Looking for a certain item */
-//                        selectionArgs, /* The argument for the certain item is the id */
-//                        null
-//                );
-//
-//                // TODO: review this. God this is complicated.
-//                query.moveToFirst();
-//                int quantity = Integer.parseInt(query.getString(query.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY)));
-//                query.close();
-//
-//                if (quantity > 0) {
-//                    quantity--;
-//                }
-//
-//                /* This updates the visual text view of the list view item */
-//                productQuantity.setText(String.valueOf(quantity));
-//
-//                /**
-//                 * This code creates a ContentValues object that then uses the content resolver's
-//                 * update method.
-//                 */
-//                values = new ContentValues();
-//                values.put(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY, String.valueOf(quantity));
-//                Uri uri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, id);
-//                mContext.getContentResolver().update(uri, values, null, null);
-//            }
-//        });
+
     }
 }

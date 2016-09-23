@@ -11,6 +11,7 @@
         android:layout_height="184dp"
         android:layout_gravity="center_vertical"
         android:gravity="center"
+        android:scaleType="fitXY"
         tools:src="@android:drawable/ic_media_next" />
 
     <LinearLayout
@@ -94,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            tools:text="Order Product" />
+            android:text="@string/detail_order_product"/>
 
         <Button
             android:id="@+id/detail_button_delete"
@@ -103,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            tools:text="Delete Product" />
+            android:text="@string/detail_delete_product" />
 
     </LinearLayout>
 
@@ -142,22 +143,22 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/detail_button_increase"
-                style="@style/ProductListItem.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                tools:text="-" />
-
-            <Button
                 android:id="@+id/detail_button_decrease"
                 style="@style/ProductListItem.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                tools:text="+" />
+                android:text="@string/decrease_quantity_button_text" />
+
+            <Button
+                android:id="@+id/detail_button_increase"
+                style="@style/ProductListItem.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/increase_quantity_button_text" />
         </LinearLayout>
 
 

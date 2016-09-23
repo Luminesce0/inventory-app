@@ -3,8 +3,7 @@
     package="com.omegaspocktari.inventoryapp">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-feature android:name="android.hardware.camera"
-        android:required="false" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -24,6 +23,11 @@
         </activity>
         <activity android:name=".InventoryDetailActivity"
             android:label="@string/app_product_editor_detail">
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO"/>
+                <data android:scheme="mailto:"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
         <provider
             android:name=".data.InventoryProvider"
