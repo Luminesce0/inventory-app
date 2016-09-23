@@ -37,9 +37,6 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
      */
     InventoryCursorAdapter mInventoryCursorAdapter;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +62,8 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         productListView.setEmptyView(emptyView);
 
         /** Adapter to create list items for each row of product data within the cursor */
-        mInventoryCursorAdapter = new InventoryCursorAdapter(this, null, getContentResolver());
+
+        mInventoryCursorAdapter = new InventoryCursorAdapter(this, null);
         productListView.setAdapter(mInventoryCursorAdapter);
 
         productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

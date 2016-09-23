@@ -56,6 +56,7 @@ public class ProductValidation {
         float storage = f;
         if (Math.abs(Math.round(f) - f) < epsilon) {
             /** 10 characters in with with 0 places after decimal */
+        Log.e(LOG_TAG, "Here's the float we're returning: " + storage);
             return String.format("$%-10.2f", storage);
         } else {
             return String.format("$%-10.2f", storage);

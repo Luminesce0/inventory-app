@@ -35,9 +35,10 @@ import java.io.IOException;
  */
 
 
-
 public class InventoryDetailActivity extends AppCompatActivity {
 
+    private static final int PRODUCT_LOADER = 0;
+    private static final String LOG_TAG = InventoryDetailActivity.class.getSimpleName();
     /**
      * Views
      */
@@ -51,11 +52,7 @@ public class InventoryDetailActivity extends AppCompatActivity {
     private Button mProductIncreaseQuantity;
     private Button mProductOrder;
     private Button mProductDelete;
-
-    private static final int PRODUCT_LOADER = 0;
     private Uri uri;
-    private static final String LOG_TAG = InventoryDetailActivity.class.getSimpleName();
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,8 +86,8 @@ public class InventoryDetailActivity extends AppCompatActivity {
 
         final String name = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_NAME));
         final int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY));
-        final int price = cursor.getInt(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_PRICE));
-        int id = cursor.getInt(cursor.getColumnIndexOrThrow(ProductEntry._ID));
+        final String price = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_PRICE));
+        final int id = cursor.getInt(cursor.getColumnIndexOrThrow(ProductEntry._ID));
         final String picture = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_PICTURE));
 
         /** Initializing all relevant views within the product detail list item view */
@@ -105,25 +102,39 @@ public class InventoryDetailActivity extends AppCompatActivity {
         mProductOrder = (Button) findViewById(R.id.detail_button_order);
         mProductDelete = (Button) findViewById(R.id.detail_button_delete);
 
+
+        /** Formatted Image and Text View strings */
+        String quantityText = "Quantity: " + Integer.toString(quantity);
+        String priceText = price;
+        String productID = "ID: " + Integer.toString(id);
+
+        /** Setting Image and Text views with the relevant data */
+        mProductName.setText(name);
+        mProductQuantity.setText(quantityText);
+        mProductPrice.setText(priceText);
+        mProductID.setText(productID);
+
+        Bitmap selectedImage = getBitmapFromUri(Uri.parse(picture));
+        if (selectedImage != null) {
+            mProductPicture.setImageBitmap(selectedImage);
+        }
+
         /** Creating On Click Listeners */
         mProductDecreaseQuantity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (!ProductValidation.checkBlank(mProductEditQuantity)) {
-                    if (ProductValidation.checkIsInteger(mProductEditQuantity)){
+                    if (ProductValidation.checkIsInteger(mProductEditQuantity)) {
 
                         int quantityVariance = Integer.parseInt(mProductEditQuantity.getText().toString());
                         int quantityChange = quantity - quantityVariance;
 
                         if (ProductValidation.checkIsPositiveInteger(quantityChange)) {
 
-                            //TODO: Remove later. Only necessary for updating multiple values.
-//                            String where = ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY + "=?";
-//                            String[] whereArgs = {Integer.toString(quantityChange)};
-
                             ContentValues values = new ContentValues();
                             values.put(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY, quantityChange);
+                            Log.e(LOG_TAG, "LOG EXAMPLE OF URI: " + uri.toString());
                             getContentResolver().update(uri, values, null, null);
                             finish();
                         } else {
@@ -146,18 +157,18 @@ public class InventoryDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (!ProductValidation.checkBlank(mProductEditQuantity)) {
-                    if (ProductValidation.checkIsInteger(mProductEditQuantity)){
+                    if (ProductValidation.checkIsInteger(mProductEditQuantity)) {
 
                         int quantityVariance = Integer.parseInt(mProductEditQuantity.getText().toString());
                         int quantityChange = quantity + quantityVariance;
 
-                        String where = ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY + "=?";
-                        String[] whereArgs = {Integer.toString(quantityChange)};
+                        String where = ProductEntry._ID + "=?";
+                        String[] whereArgs = {Integer.toString(id)};
 
                         ContentValues values = new ContentValues();
                         values.put(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY, quantityChange);
                         getContentResolver().update(uri, values, where, whereArgs);
-                        database.update(ProductEntry.TABLE_NAME, values, null, null);
+//                        database.update(ProductEntry.TABLE_NAME, values, null, null);
                         finish();
                     } else {
                         Toast.makeText(InventoryDetailActivity.this, "Edit Quantity Field Is Not Integer", Toast.LENGTH_SHORT).show();
@@ -168,7 +179,7 @@ public class InventoryDetailActivity extends AppCompatActivity {
                 }
 
             }
-            });
+        });
         mProductOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -176,10 +187,10 @@ public class InventoryDetailActivity extends AppCompatActivity {
                 Uri pictureUri = Uri.parse(picture);
                 String subject = "Order For: " + name;
                 String stream = "Hello! \n"
-                        + "We're looking to purchase more stock of " + name + ".\n"
+                        + "We're looking to purchase more stock of " + name + ".\n\n"
                         + "Our current product listing is as follows... \n"
                         + "Product Name: " + name + "\n"
-                        + "Product Price: $" + price + "\n"
+                        + "Product Price: " + price + "\n"
                         + "Product Quantity: " + quantity + "\n";
 
                 Intent orderIntent = new Intent(Intent.ACTION_SENDTO);
@@ -219,24 +230,9 @@ public class InventoryDetailActivity extends AppCompatActivity {
                 deleteAlert.create();
                 deleteAlert.show();
             }
-            });
+        });
 
 
-        /** Formatted Image and Text View strings */
-        String quantityText = "Quantity: " + Integer.toString(quantity);
-        String priceText = "Price: " + Integer.toString(price);
-        String productID = "ID: " + Integer.toString(id);
-
-        /** Setting Image and Text views with the relevant data */
-        mProductName.setText(name);
-        mProductQuantity.setText(quantityText);
-        mProductPrice.setText(priceText);
-        mProductID.setText(productID);
-
-        Bitmap selectedImage = getBitmapFromUri(Uri.parse(picture));
-        if (selectedImage != null) {
-            mProductPicture.setImageBitmap(selectedImage);
-        }
     }
 
     private Bitmap getBitmapFromUri(Uri uri) {
@@ -277,7 +273,7 @@ public class InventoryDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // If the pet hasn't changed, continue with handling back button press
-            super.onBackPressed();
-            return;
+        super.onBackPressed();
+        return;
     }
 }

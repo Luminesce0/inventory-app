@@ -28,7 +28,6 @@ import android.widget.Toast;
 
 import com.omegaspocktari.inventoryapp.data.InventoryContract;
 import com.omegaspocktari.inventoryapp.data.InventoryContract.ProductEntry;
-import com.omegaspocktari.inventoryapp.data.InventoryDbHelper;
 import com.omegaspocktari.inventoryapp.data.ProductValidation;
 
 import java.io.IOException;
@@ -38,22 +37,14 @@ import java.io.IOException;
  */
 public class EditorActivity extends AppCompatActivity {
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_TAKE_PHOTO = 1;
     private static final String LOG_TAG = EditorActivity.class.getSimpleName();
-    private static final int PRODUCT_LOADER = 0;
     private static final int PICK_IMAGE_REQUEST = 1;
-    String mCurrentPhotoPath;
-    private Uri mCurrentProductUri;
     private EditText mNameEditText;
     private EditText mQuantityEditText;
     private EditText mPriceEditText;
     private ImageView mPictureImageView;
     private Button mPictureButton;
-    private int mQuantity = 0;
-    private InventoryDbHelper inventoryDbHelper;
     private boolean mProductHasChanged;
-    private boolean mProductMissingFields;
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -79,8 +70,6 @@ public class EditorActivity extends AppCompatActivity {
 
             public void onClick(View view) {
                 Intent intent;
-                Log.e(LOG_TAG, "While is set and the ifs are worked through.");
-
                 if (Build.VERSION.SDK_INT < 19) {
                     intent = new Intent(Intent.ACTION_GET_CONTENT);
                 } else {
@@ -89,8 +78,6 @@ public class EditorActivity extends AppCompatActivity {
                 }
 
                 // Show only images, no videos or anything else
-                Log.e(LOG_TAG, "Check write to external permissions");
-
                 checkWriteToExternalPerms();
                 intent.setType("image/*");
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
@@ -258,8 +245,6 @@ public class EditorActivity extends AppCompatActivity {
                 && !ProductValidation.checkBlank(productPrice)
                 && !ProductValidation.checkBlank(productQuantity)
                 && !ProductValidation.checkBlank(productPicture)) {
-            Log.e(LOG_TAG, "All checkBlanks returned false/pr");
-            //TODO: Add functionality to support floats and integers.
             try {
                 if (!ProductValidation.checkIsFloat(productPrice) || !ProductValidation.checkIsInteger(productQuantity)) {
                     throw new IllegalArgumentException("Incorrect Params");
@@ -286,9 +271,7 @@ public class EditorActivity extends AppCompatActivity {
             ContentValues values = new ContentValues();
 
             float floatPrice = Float.valueOf(mPriceEditText.getText().toString());
-            Log.e(LOG_TAG, "Float Price in ADDPRODUCT(): " + floatPrice);
             String price = ProductValidation.formatFloat(floatPrice);
-            Log.e(LOG_TAG, "Returned vriable from Product Validation: " + price);
 
             values.put(InventoryContract.ProductEntry.COLUMN_PRODUCT_NAME,
                     mNameEditText.getText().toString());
@@ -300,7 +283,7 @@ public class EditorActivity extends AppCompatActivity {
                     mQuantityEditText.getText().toString());
             getContentResolver().insert(ProductEntry.CONTENT_URI, values);
 
-            Toast.makeText(getBaseContext(), "Saved Product: " + mPriceEditText.getText().toString(),
+            Toast.makeText(getBaseContext(), "Saved Product: " + mNameEditText.getText().toString(),
                     Toast.LENGTH_LONG).show();
             return true;
         }
