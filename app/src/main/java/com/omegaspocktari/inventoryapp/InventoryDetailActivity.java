@@ -197,6 +197,7 @@ public class InventoryDetailActivity extends AppCompatActivity {
                 orderIntent.setData(Uri.parse("mailto:"));
                 orderIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
                 orderIntent.putExtra(Intent.EXTRA_TEXT, stream);
+                Log.e(LOG_TAG, "Uri: " + pictureUri);
                 orderIntent.putExtra(Intent.EXTRA_STREAM, pictureUri);
 
                 if (orderIntent.resolveActivity(getPackageManager()) != null) {
