@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.support.v4.app.NavUtils;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -193,12 +194,23 @@ public class InventoryDetailActivity extends AppCompatActivity {
                         + "Product Price: " + price + "\n"
                         + "Product Quantity: " + quantity + "\n";
 
-                Intent orderIntent = new Intent(Intent.ACTION_SENDTO);
-                orderIntent.setData(Uri.parse("mailto:"));
-                orderIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-                orderIntent.putExtra(Intent.EXTRA_TEXT, stream);
-                Log.e(LOG_TAG, "Uri: " + pictureUri);
-                orderIntent.putExtra(Intent.EXTRA_STREAM, pictureUri);
+                Intent orderIntent = ShareCompat.IntentBuilder.from(InventoryDetailActivity.this)
+                        .setStream(pictureUri)
+                        .setSubject(subject)
+                        .setText(stream)
+                        .getIntent();
+
+                orderIntent.setData(pictureUri);
+                orderIntent.setType("message/rfc822");
+                orderIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(Intent.createChooser(orderIntent, "Share with"));
+
+//                orderIntent.setData(Uri.parse("mailto:"));
+//                orderIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+//                orderIntent.putExtra(Intent.EXTRA_TEXT, stream);
+//                Log.e(LOG_TAG, "Uri: " + pictureUri);
+//                orderIntent.putExtra(Intent.EXTRA_STREAM, pictureUri);
+//                orderIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
                 if (orderIntent.resolveActivity(getPackageManager()) != null) {
                     startActivity(orderIntent);
