@@ -16,7 +16,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -90,7 +89,6 @@ public class EditorActivity extends AppCompatActivity {
         mPictureImageView.setOnTouchListener(mTouchListener);
         mPictureButton.setOnTouchListener(mTouchListener);
 
-        Log.e(LOG_TAG, "Loader Manager has been set.");
     }
 
     /**
@@ -137,7 +135,6 @@ public class EditorActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             uri = data.getData();
-            Log.e(LOG_TAG, "URI: " + uri.toString());
             String[] projection = {MediaStore.Images.Media.DATA};
 
             Cursor cursor = getContentResolver().query(uri, projection, null, null, null);

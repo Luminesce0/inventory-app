@@ -10,9 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
 tools:context="com.omegaspocktari.inventoryapp.InventoryActivity">
 
-    <!--TODO: Must implement a default text view-->
-
-    <!--TODO: Here will be the list item layout along with the given buttons.-->
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,21 +26,12 @@ tools:context="com.omegaspocktari.inventoryapp.InventoryActivity">
 
     </RelativeLayout>
 
-    <!--TODO: List Items will depict product name, current quantity & price. Populates products stored in table-->
-    <!--TODO: Each list item will allow the user to track a sale of the item. This would be the detail screen...? Cont.
-        Detail View Intent. Confused.-->
-    <!--TODO: Button to add new product (Contains all relevant details IE: pictures, quantity, etc... cont.)
-        Empty product information will not be accepted. Checkout InventoryActivity for implementation-->
-    <!--TODO: Button sale on each list item (list?) reduces the quantity available by one... cont.
-        This will occur every time unless a product goes below 0. Checkout InventoryActivity for implementation-->
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:dividerHeight="2dp"
         android:orientation="vertical">
-
-
     </ListView>
 
     <android.support.design.widget.FloatingActionButton
@@ -56,25 +44,5 @@ tools:context="com.omegaspocktari.inventoryapp.InventoryActivity">
         android:src="@android:drawable/ic_input_add"
         app:layout_anchor="@id/list"
         app:layout_anchorGravity="bottom|right|end" />
-
-    <!--TODO: Detail layout??? This will contain the picture and all other information... Cont.
-        Check Inventory Contract for more information.-->
-    <!--TODO: Buttons - Detail Layout: Modify Current Quantity: Tracking a sale/Receiving a shipment-->
-    <!--TODO: Buttons - Detail View: Modify Quantity Buttons: Thought this was in the layout? Cont.
-        This may properly increase/decrease the quantity available for the correct product.
-        Additional possible user input where student can declare how much quantity to add.-->
-
-    <!--TODO: Buttons - Detail Layout: Contains a button to order from the supplier... Cont.
-        Sends an intent to either a phone app or an email app to contact the supplier using info
-        stored within the database. Checkout InventoryContract-->
-
-    <!--TODO: Detail View??? This area will contain the detail screen for a single product... Cont.
-        Will the detail view just populate information from a list item and then put that inside a
-        Detail Layout with those other buttons? Where do the Detail View buttons come into play?!-->
-
-    <!--TODO: Buttons - Detail View: Button to delete the product record entirely... Cont.
-        Does this mean that I need to delete just that one product or ALL the entries of the products?
-        the button will demand a confirmation and then return the user back to the main activity-->
-
 
 </android.support.design.widget.CoordinatorLayout>

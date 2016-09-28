@@ -15,7 +15,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -68,8 +67,6 @@ public class InventoryDetailActivity extends AppCompatActivity {
         final Uri uri = getIntent().getData();
         final long uriID = ContentUris.parseId(uri);
 
-        Log.e(LOG_TAG, "CHECK OUT THIS URI PLEASE NOTICE ME IN THE COOOOOODE ::::: " + uri.toString());
-
         String selection = ProductEntry._ID + "=?";
         String[] selectionArgs = {Long.toString(uriID)};
 
@@ -106,13 +103,12 @@ public class InventoryDetailActivity extends AppCompatActivity {
 
         /** Formatted Image and Text View strings */
         String quantityText = "Quantity: " + Integer.toString(quantity);
-        String priceText = price;
         String productID = "ID: " + Integer.toString(id);
 
         /** Setting Image and Text views with the relevant data */
         mProductName.setText(name);
         mProductQuantity.setText(quantityText);
-        mProductPrice.setText(priceText);
+        mProductPrice.setText(price);
         mProductID.setText(productID);
 
         Bitmap selectedImage = getBitmapFromUri(Uri.parse(picture));
@@ -135,7 +131,6 @@ public class InventoryDetailActivity extends AppCompatActivity {
 
                             ContentValues values = new ContentValues();
                             values.put(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY, quantityChange);
-                            Log.e(LOG_TAG, "LOG EXAMPLE OF URI: " + uri.toString());
                             getContentResolver().update(uri, values, null, null);
                             finish();
                         } else {
@@ -205,13 +200,6 @@ public class InventoryDetailActivity extends AppCompatActivity {
                 orderIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(orderIntent, "Share with"));
 
-//                orderIntent.setData(Uri.parse("mailto:"));
-//                orderIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-//                orderIntent.putExtra(Intent.EXTRA_TEXT, stream);
-//                Log.e(LOG_TAG, "Uri: " + pictureUri);
-//                orderIntent.putExtra(Intent.EXTRA_STREAM, pictureUri);
-//                orderIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
                 if (orderIntent.resolveActivity(getPackageManager()) != null) {
                     startActivity(orderIntent);
                 }
@@ -258,7 +246,6 @@ public class InventoryDetailActivity extends AppCompatActivity {
             parcelFileDescriptor.close();
             return image;
         } catch (Exception e) {
-            Log.e(LOG_TAG, "Failed to load image.", e);
             return null;
         } finally {
             try {
@@ -267,7 +254,6 @@ public class InventoryDetailActivity extends AppCompatActivity {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(LOG_TAG, "Error closing ParcelFile Descriptor");
             }
         }
     }
@@ -287,6 +273,5 @@ public class InventoryDetailActivity extends AppCompatActivity {
     public void onBackPressed() {
         // If the pet hasn't changed, continue with handling back button press
         super.onBackPressed();
-        return;
     }
 }
