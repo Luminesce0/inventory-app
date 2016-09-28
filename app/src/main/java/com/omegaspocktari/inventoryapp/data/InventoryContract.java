@@ -44,8 +44,7 @@ public class InventoryContract {
 
         /**
          * All keys for the columns of the inventory database product table.
-         *<
-         * TODO: Continued from activity_inventory
+         *
          * So from information stored in the database one will be able to order more from a supplier with
          * an intent.
          *          +This means an additional email address column?

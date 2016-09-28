@@ -7,7 +7,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.util.Log;
 
 import com.omegaspocktari.inventoryapp.data.InventoryContract.ProductEntry;
 
@@ -109,7 +108,6 @@ public class InventoryProvider extends ContentProvider {
     }
 
     private Uri insertProduct(Uri uri, ContentValues contentValues) {
-        //TODO: Checkout the PetProvider Insert class for examples of content validation
         /** Obtain a writable database to add product */
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
@@ -117,7 +115,6 @@ public class InventoryProvider extends ContentProvider {
         long id = database.insert(ProductEntry.TABLE_NAME, null, contentValues);
 
         if (id == -1) {
-            Log.e(LOG_TAG, "Failed to insert row for: " + id);
             return null;
         }
 
@@ -175,7 +172,6 @@ public class InventoryProvider extends ContentProvider {
      * Return the number of rows that were successfully updated.
      */
     private int updateProduct(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
-        //TODO: The class only wants us to be able to modify quantity properly.
         if (contentValues.containsKey(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY)) {
             String productQuantity = contentValues.getAsString(ProductEntry.COLUMN_PRODUCT_CURRENT_QUANTITY);
 

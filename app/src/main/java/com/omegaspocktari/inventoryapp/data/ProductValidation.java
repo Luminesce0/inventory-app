@@ -1,6 +1,5 @@
 package com.omegaspocktari.inventoryapp.data;
 
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -20,7 +19,6 @@ public class ProductValidation {
 
             return true;
         } catch (NumberFormatException e) {
-            Log.e(LOG_TAG, "Error parsing float: " + editTextField.getText().toString(), e);
             return false;
         }
     }
@@ -30,33 +28,23 @@ public class ProductValidation {
             Integer.parseInt(editTextField.getText().toString());
             return true;
         } catch (NumberFormatException e) {
-            Log.e(LOG_TAG, "Error parsing int: " + editTextField.getText().toString(), e);
             return false;
         }
     }
 
     public static boolean checkIsPositiveInteger(int integer) {
-        if (integer >= 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return integer >= 0;
     }
+
     public static boolean checkBlank(ImageView imageViewField) {
-        if (imageViewField.getDrawable() == null) {
-            return true;
-        } else {
-            return false;
-        }
+        return imageViewField.getDrawable() == null;
     }
 
     public static String formatFloat(Float f) {
-        Log.e(LOG_TAG, "Here's the FLoat: " + f);
         float epsilon = 0.004f;
         float storage = f;
         if (Math.abs(Math.round(f) - f) < epsilon) {
             /** 10 characters in with with 0 places after decimal */
-        Log.e(LOG_TAG, "Here's the float we're returning: " + storage);
             return String.format("$%-10.2f", storage);
         } else {
             return String.format("$%-10.2f", storage);

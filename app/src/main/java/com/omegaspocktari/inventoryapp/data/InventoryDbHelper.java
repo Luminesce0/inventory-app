@@ -32,10 +32,6 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
     /**
      * SQL Code to start up a table.
-     *
-     * TODO: Possibly add The tracking stuff? Also might be good to implement a picture area.
-     * TODO: The above todo must also be done in the InventoryContract.ProductEntry class.
-     * TODO: Delete this only when done with the above.
      */
     final String SQL_CREATE_PRODUCT_TABLE = "CREATE TABLE " + ProductEntry.TABLE_NAME + " ( "
             +ProductEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -55,8 +51,6 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        /**
-         * TODO: I wonder if I'll have to put anything here.
-         */
+        // Nothing
     }
 }
